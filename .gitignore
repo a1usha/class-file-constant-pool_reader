@@ -21,7 +21,7 @@ pom.xml.asc
 
 # IntelliJ
 out/
-build/
+../ojp_2/build/
 .gradle/
 .idea/
 settings.gradle
@@ -35,7 +35,6 @@ bin/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
-gradlew.bat
 
 # auto-import.
  .idea/modules.xml
