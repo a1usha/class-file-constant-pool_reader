@@ -13,6 +13,7 @@ import ru.nsu.fit.ojp.ushaev.ojp_4.domain.storage.Variable;
 import ru.nsu.fit.ojp.ushaev.ojp_4.domain.types.SupportedTypes;
 import ru.nsu.fit.ojp.ushaev.ojp_4.domain.types.Type;
 import ru.nsu.fit.ojp.ushaev.ojp_4.domain.types.TypeResolver;
+import ru.nsu.fit.ojp.ushaev.ojp_4.stringutils.Concatenation;
 
 public class ExpressionVisitor extends ZarfBaseVisitor<Expression> {
 
@@ -43,6 +44,13 @@ public class ExpressionVisitor extends ZarfBaseVisitor<Expression> {
 
         Expression leftExpression = leftExprContext.accept(this);
         Expression rightExpression = rightExprContext.accept(this);
+
+        System.out.println(leftExpression.getType());
+        System.out.println(rightExpression.getType());
+
+        if (leftExpression.getType() == SupportedTypes.STRING && rightExpression.getType() == SupportedTypes.STRING) {
+            return new Concatenation(leftExpression.getType(), leftExpression, rightExpression);
+        }
 
         TerminalNode operator = ctx.PLUS_MINUS();
         switch (operator.getSymbol().getText()) {

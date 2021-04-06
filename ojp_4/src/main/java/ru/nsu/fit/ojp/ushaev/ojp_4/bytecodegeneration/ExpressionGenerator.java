@@ -11,6 +11,8 @@ import ru.nsu.fit.ojp.ushaev.ojp_4.domain.expressions.Value;
 import ru.nsu.fit.ojp.ushaev.ojp_4.domain.storage.VariableStorage;
 import ru.nsu.fit.ojp.ushaev.ojp_4.domain.storage.Variable;
 import ru.nsu.fit.ojp.ushaev.ojp_4.domain.types.Type;
+import ru.nsu.fit.ojp.ushaev.ojp_4.stringutils.Concatenation;
+import ru.nsu.fit.ojp.ushaev.ojp_4.stringutils.StringExpression;
 
 public class ExpressionGenerator {
 
@@ -44,6 +46,7 @@ public class ExpressionGenerator {
             int intValue = Integer.parseInt(strValue);
             mv.visitLdcInsn(intValue);
         } else {
+            strValue = strValue.replace("\"", "");
             mv.visitLdcInsn(strValue);
         }
     }
@@ -71,6 +74,34 @@ public class ExpressionGenerator {
     public void generate(ModDivision mod) {
         evaluateArithmeticComponents(mod);
         mv.visitInsn(Opcodes.IREM);
+    }
+
+    public void generate(Concatenation concatenation) {
+        evaluateArithmeticComponents(concatenation);
+
+        mv.visitVarInsn(Opcodes.ASTORE, 101);
+        mv.visitVarInsn(Opcodes.ASTORE, 102);
+
+        mv.visitTypeInsn(Opcodes.NEW,"java/lang/StringBuilder");
+        mv.visitInsn(Opcodes.DUP);
+        mv.visitMethodInsn(Opcodes.INVOKESPECIAL,"java/lang/StringBuilder","<init>","()V",false);
+        mv.visitVarInsn(Opcodes.ALOAD, 102);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,"java/lang/StringBuilder","append",
+                "(Ljava/lang/String;)Ljava/lang/StringBuilder;",false);
+        mv.visitVarInsn(Opcodes.ALOAD, 101);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,"java/lang/StringBuilder","append",
+                "(Ljava/lang/String;)Ljava/lang/StringBuilder;",false);
+
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,"java/lang/StringBuilder",
+                "toString","()Ljava/lang/String;",false);
+    }
+
+    private void evaluateArithmeticComponents(StringExpression expression) {
+        Expression leftExpression = expression.getLeftExpression();
+        Expression rightExpression = expression.getRightExpression();
+
+        leftExpression.create(this);
+        rightExpression.create(this);
     }
 
     private void evaluateArithmeticComponents(ArithmeticExpression expression) {
