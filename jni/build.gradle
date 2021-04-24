@@ -49,4 +49,5 @@ jar {
     }
 }
 
+jar.dependsOn 'cpuinfoSharedLibrary'
 run.dependsOn 'cpuinfoSharedLibrary'
