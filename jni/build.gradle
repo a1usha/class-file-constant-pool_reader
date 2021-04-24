@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'c'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+mainClassName = 'ru.nsu.fit.ojp.ushaev.jni.Main'
+
+run {
+    systemProperty "java.library.path", file("${buildDir}/libs/cpuinfo/shared").absolutePath
+}
+
+model {
+    components {
+        cpuinfo(NativeLibrarySpec) {
+            binaries.all {
+                if (targetPlatform.operatingSystem.linux) {
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+                    cCompiler.args '-D_FILE_OFFSET_BITS=64'
+                }
+            }
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+run.dependsOn 'cpuinfoSharedLibrary'
