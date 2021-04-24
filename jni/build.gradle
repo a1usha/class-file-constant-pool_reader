@@ -21,10 +21,18 @@ dependencies {
 mainClassName = 'ru.nsu.fit.ojp.ushaev.jni.Main'
 
 run {
-    systemProperty "java.library.path", file("${buildDir}/libs/cpuinfo/shared").absolutePath
+    systemProperty "java.library.path", file("${buildDir}/libs/cpuinfo/shared/arm").absolutePath
+    systemProperty "java.library.path", file("${buildDir}/libs/cpuinfo/shared/x64").absolutePath
 }
 
 model {
+    toolChains {
+        gcc(Gcc) {
+            target("arm")
+            target("x64")
+        }
+    }
+
     platforms {
         x64 {
             architecture "x64"
@@ -34,9 +42,11 @@ model {
         }
     }
 
-
     components {
         cpuinfo(NativeLibrarySpec) {
+            targetPlatform "arm"
+            targetPlatform "x64"
+
             binaries.all {
                 if (targetPlatform.operatingSystem.linux) {
                     cCompiler.args '-I', "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
@@ -59,5 +69,8 @@ jar {
     }
 }
 
-jar.dependsOn 'cpuinfoSharedLibrary'
-run.dependsOn 'cpuinfoSharedLibrary'
+jar.dependsOn 'cpuinfoArmSharedLibrary'
+run.dependsOn 'cpuinfoArmSharedLibrary'
+
+jar.dependsOn 'cpuinfoX64SharedLibrary'
+run.dependsOn 'cpuinfoX64SharedLibrary'
