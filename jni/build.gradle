@@ -25,6 +25,16 @@ run {
 }
 
 model {
+    platforms {
+        x64 {
+            architecture "x64"
+        }
+        arm {
+            architecture "arm"
+        }
+    }
+
+
     components {
         cpuinfo(NativeLibrarySpec) {
             binaries.all {
