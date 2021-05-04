@@ -26,7 +26,3 @@ void cpuinfo() {
     }
     fclose (fp);
 }
-
-// int main() {
-//     cpuinfo();
-// }
