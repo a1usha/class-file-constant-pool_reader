@@ -21,16 +21,4 @@ model name      : Intel(R) Core(TM) i3-7100U CPU @ 2.40GHz
 cpu MHz         : 2400.000
 cache size      : 256 KB
 cpu cores       : 2
-model name      : Intel(R) Core(TM) i3-7100U CPU @ 2.40GHz
-cpu MHz         : 2400.000
-cache size      : 256 KB
-cpu cores       : 2
-model name      : Intel(R) Core(TM) i3-7100U CPU @ 2.40GHz
-cpu MHz         : 2400.000
-cache size      : 256 KB
-cpu cores       : 2
-model name      : Intel(R) Core(TM) i3-7100U CPU @ 2.40GHz
-cpu MHz         : 2400.000
-cache size      : 256 KB
-cpu cores       : 2
 ```
